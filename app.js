@@ -16,9 +16,11 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
 
 // Load Route Files
+const EventRoute = require('./routes/event')
 const Auth = require('./routes/auth')
 
 // Mount Routes
+app.use('/api/v1/event', EventRoute)
 app.use('/api/v1/auth', Auth)
 
 // Error Handler

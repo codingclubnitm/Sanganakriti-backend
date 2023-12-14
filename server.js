@@ -5,6 +5,7 @@ const colors = require('colors');
 const connectDB = require('./config/db');
 const morgan = require('morgan');
 
+
 // Handle Uncaught exception
 process.on('uncaughtException', (err, promise) => {
   console.log(`Error : ${err.message}`.red);
@@ -34,7 +35,7 @@ if(process.env.NODE_ENV === "development"){
     app.use(morgan("dev"));
 }
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to SanganKriti');
@@ -52,3 +53,4 @@ process.on('unhandledRejection', (err, promise) => {
     process.exit(1);
   });
 });
+ 
