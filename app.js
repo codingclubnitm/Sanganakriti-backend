@@ -12,8 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: true, credentials: true }));
 
 // Load Route Files
+const EventRoute = require('./routes/event')
 
 // Mount Routes
+app.use('/api/v1/event', EventRoute)
 
 // Error Handler
 app.use(ErrorHandler);
