@@ -1,5 +1,6 @@
 const app = require('./app');
 const dotenv = require('dotenv');
+const cloudinary = require('cloudinary')
 const colors = require('colors');
 const connectDB = require('./config/db');
 const morgan = require('morgan');
@@ -15,6 +16,13 @@ process.on('uncaughtException', (err, promise) => {
 
 // Config Dotenv
 dotenv.config({ path: './config/config.env' });
+
+// Cloudinary
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API,
+  api_secret: process.env.CLORDINARY_SECRET,
+});
 
 // Connect to Mongodb Database
 if (process.env.NODE_ENV != "test") {
