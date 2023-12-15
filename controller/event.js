@@ -78,15 +78,26 @@ exports.deleteEvent = AsyncHandler(async (req, res, next) => {
   // @route     GET /api/v1/event/:eventId
   // @access    Public
 exports.getAllEvents = AsyncHandler(async(req,res,next) => {
-    
- 
+  try {
+    const event = await Event.find();
+    res.status(200)
+      .json({ success: true, data: event });
+  } catch (err) {
+    next(err);
+  }
 })
 
   // @desc      Get Single Event
   // @route     GET /api/v1/event/:eventId
   // @access    Public
 exports.getSingleEvent = AsyncHandler(async(req,res,next) => {
-    
+  try {
+    const event = await Event.findById(req.params.id);
+    res.status(200)
+      .json({ success: true, data: event });
+  } catch (err) {
+       next(err);
+  }
 })
 
 
