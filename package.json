@@ -16,6 +16,7 @@
   "author": "Coding Club NITM",
   "license": "MIT",
   "dependencies": {
+    "all": "^0.0.0",
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.10",
     "cloudinary": "^1.41.0",
