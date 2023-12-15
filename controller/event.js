@@ -35,11 +35,7 @@ exports.deleteEvent = AsyncHandler(async (req, res, next) => {
     // Delete any event
     const event = await Event.findById(req.params.id);
   
-    if (!event) {
-      return next(
-        new ErrorResponse(`No event with the id of ${req.params.id}`, 404)
-      );
-    }
+ 
   
     // Move this line outside the if block
     await Event.findByIdAndDelete(req.params.id);
