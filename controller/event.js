@@ -25,6 +25,28 @@ exports.createEvent = AsyncHandler(async(req,res,next) => {
   // @access    Private(Admin and Team Member)
 exports.updateEvent = AsyncHandler(async(req,res,next) => {
     //Update the event
+    const eventId = req.params.eventId;
+    if (!eventId) {
+      return next(
+        new ErrorResponse(`No event with the id of ${req.params.eventId}`, 404)
+      );
+    }
+
+    
+    const updatedEvent = await Event.findByIdAndUpdate(
+            eventId,
+            {
+              name: req.body.name,
+              description: req.body.description,
+              leader: req.body.leader,
+            },
+            { new: true }
+        );
+        
+        res.status(200).json({
+          success: true,
+          data: eventId
+        });
 
 })
 
