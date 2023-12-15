@@ -26,26 +26,21 @@ exports.createEvent = AsyncHandler(async(req,res,next) => {
 exports.updateEvent = AsyncHandler(async(req,res,next) => {
     //Update the event
     const eventId = req.params.eventId;
-    if (!eventId) {
+    let event = await Event.findById(eventId);
+    if (!event) {
       return next(
-        new ErrorResponse(`No event with the id of ${req.params.eventId}`, 404)
+        new ErrorResponse(`No event found with the id of ${eventId}`, 404)
       );
     }
 
     
     const updatedEvent = await Event.findByIdAndUpdate(
-            eventId,
-            {
-              name: req.body.name,
-              description: req.body.description,
-              leader: req.body.leader,
-            },
-            { new: true }
+            eventId, req.body, { new: true,  runValidators: true } 
         );
         
         res.status(200).json({
           success: true,
-          data: eventId
+          data: event
         });
 
 })
