@@ -31,10 +31,25 @@ exports.updateEvent = AsyncHandler(async(req,res,next) => {
   // @desc      Delete Event
   // @route     DELETE /api/v1/event/:eventId
   // @access    Private(Admin and Team Member)
-exports.deleteEvent = AsyncHandler(async(req,res,next) => {
-   //Delete any event
-
-})
+exports.deleteEvent = AsyncHandler(async (req, res, next) => {
+    // Delete any event
+    const event = await Event.findById(req.params.id);
+  
+    if (!event) {
+      return next(
+        new ErrorResponse(`No event with the id of ${req.params.id}`, 404)
+      );
+    }
+  
+    // Move this line outside the if block
+    await Event.findByIdAndDelete(req.params.id);
+  
+    res.status(200).json({
+      success: true,
+      data: {}
+    });
+  });
+  
 
   // @desc      Get All Event
   // @route     GET /api/v1/event/:eventId
