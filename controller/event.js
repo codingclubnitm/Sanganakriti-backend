@@ -1,6 +1,6 @@
 const Event = require('../models/Event')
 const AsyncHandler = require('../middleware/async.js')
-
+const ErrorResponse = require('../utils/errorResponse.js')
 
   // @desc      Create Event
   // @route     POST /api/v1/event
@@ -33,17 +33,22 @@ exports.updateEvent = AsyncHandler(async(req,res,next) => {
   // @access    Private(Admin and Team Member)
 exports.deleteEvent = AsyncHandler(async (req, res, next) => {
     // Delete any event
-    const event = await Event.findById(req.params.id);
+    const eventId = req.params.eventId;
+      let event = await Event.findById(eventId);
+      if (!event) {
+        return next(
+          new ErrorResponse(`No event with the id of ${eventId}`, 404)
+        );
+      }
   
- 
-  
-    // Move this line outside the if block
-    await Event.findByIdAndDelete(req.params.id);
-  
-    res.status(200).json({
-      success: true,
-      data: {}
-    });
+      
+      const deletedEvent = await Event.findOneAndDelete(req.params.id)
+      
+          
+          res.status(200).json({
+            success: true,
+            event:{}
+          });
   });
   
 
