@@ -30,7 +30,9 @@ exports.createUser = AsyncHandler(async (req, res, next) => {
 
   const fileUri = getDataUri(file);
 
-  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content, {
+    folder: "SanganaKriti_User",
+  });
 
   req.body.avatar = {
     public_id: myCloud.public_id,

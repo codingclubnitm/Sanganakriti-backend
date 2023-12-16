@@ -21,7 +21,9 @@ exports.createEvent = AsyncHandler(async (req, res, next) => {
 
   const fileUri = getDataUri(file);
 
-  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content, {
+    folder: "SanganaKriti_Event",
+  });
 
   req.body.avatar = {
     public_id: myCloud.public_id,
@@ -47,6 +49,26 @@ exports.updateEvent = AsyncHandler(async (req, res, next) => {
     return next(
       new ErrorResponse(`No event found with the id of ${eventId}`, 404)
     );
+  }
+
+  if (req.file) {
+    const file = req.file;
+
+    // Make sure the image is a photo
+    if (!file.mimetype.startsWith('image')) {
+      return next(new ErrorResponse(`Please upload an image  file`, 400));
+    }
+
+    const fileUri = getDataUri(file);
+
+    const myCloud = await cloudinary.v2.uploader.upload(fileUri.content, {
+      folder: "SanganaKriti_Event",
+    });
+    
+    req.body.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
   }
 
   const updatedEvent = await Event.findByIdAndUpdate(eventId, req.body, {
