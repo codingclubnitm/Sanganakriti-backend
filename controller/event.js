@@ -1,16 +1,34 @@
 const Event = require("../models/Event");
 const AsyncHandler = require("../middleware/async.js");
 const ErrorResponse = require("../utils/errorResponse.js");
+const getDataUri = require("../utils/dataUri");
+const cloudinary = require("cloudinary");
 
 // @desc      Create Event
 // @route     POST /api/v1/event
 // @access    Private(Admin and Team Member)
 exports.createEvent = AsyncHandler(async (req, res, next) => {
-  let event = await Event.create({
-    name: req.body.name,
-    description: req.body.description,
-    leader: req.body.leader,
-  });
+  if (!req.file) {
+    return next(new ErrorResponse(`Please upload a avatar`, 400));
+  }
+
+  const file = req.file;
+
+  // Make sure the image is a photo
+  if (!file.mimetype.startsWith("image")) {
+    return next(new ErrorResponse(`Please upload an image  file`, 400));
+  }
+
+  const fileUri = getDataUri(file);
+
+  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
+  req.body.avatar = {
+    public_id: myCloud.public_id,
+    url: myCloud.secure_url,
+  };
+
+  let event = await Event.create(req.body);
 
   res.status(200).json({
     success: true,
